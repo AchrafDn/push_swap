@@ -1,40 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adadoun <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 17:23:15 by adadoun           #+#    #+#             */
-/*   Updated: 2023/02/07 17:23:17 by adadoun          ###   ########.fr       */
+/*   Created: 2023/02/07 17:17:45 by adadoun           #+#    #+#             */
+/*   Updated: 2023/02/07 17:17:47 by adadoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int	ft_atoi(const char *str)
+size_t	ft_strlen(const char *str)
 {
 	size_t	i;
-	int		p;
-	size_t	res;
 
-	res = 0;
-	p = 1;
 	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
+	while (str[i])
 	{
-		if (str[i] == '-')
-			p = -1;
 		i++;
 	}
-	while (str[i] <= '9' && str[i] >= '0')
+	return (i);
+}
+
+void	ft_free(char **ptr)
+{
+	int	i;
+
+	i = 0;
+	while (ptr[i])
 	{
-		res = (res * 10) + (str[i] - 48);
-		if (res > 2147483647)
-			ft_error();
+		free(ptr[i]);
 		i++;
 	}
-	return (res * p);
+	free(ptr);
+}
+
+void	ft_error(void)
+{
+	write(2, "Error\n", 6);
+	exit(0);
 }

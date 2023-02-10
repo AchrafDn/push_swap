@@ -1,6 +1,15 @@
 CC = cc
 Cflags = -Wall -Wextra -Werror 
-Cfiles = moves.c push.c utils.c ft_atoi.c ft_split.c ft_substr.c
+Cfiles = moves.c \
+		push.c \
+		sort_3.c \
+		sort_5.c \
+		utils1.c \
+		utils2.c \
+		utils3.c \
+		ft_atoi.c \
+		ft_split.c \
+		ft_substr.c
 
 OBJ = ${Cfiles:.c=.o}
 

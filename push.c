@@ -1,94 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adadoun <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/10 02:29:44 by adadoun           #+#    #+#             */
+/*   Updated: 2023/02/10 02:29:45 by adadoun          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
-void	ft_error()
-{
-	write(2, "Error\n", 6);
-	exit(0);
-}
-
-void	ft_free(char **ptr)
-{
-	int i;
-
-	i = 0;
-	while(ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
-}
-void	is_duplicate(t_list	*head, int nb)
-{
-	while(head)
-	{
-		if (head->i == nb)
-			ft_error();
-		head = head->link;
-	}
-}
-int	*tab(t_list *head)
-{
-	int	*arr;
-	int	i;
-
-	i = 0;
-	arr = malloc(sizeof(int) * ft_lstsize(head));
-	while(head)
-	{
-		arr[i] = head->i;
-		head = head->link;
-		i++;
-	}
-	return(arr);
-}
-int main(int ac, char **av)
+void	parssing(char **av, t_list **head, int i)
 {
 	char	**str;
-	t_list	*head;
-	t_list	*temp;
-	int	j = 0;
-	int nb = 0;
-	int i;
+	int		j;
+	int		nb;
 
-	i = 1;
-	if(ac > 1)
+	nb = 0;
+	while (av[i])
 	{
-		while(av[i])
+		j = -1;
+		str = ft_split(av[i], ' '); //free
+		if (*str == NULL)
+			ft_error();
+		while (str[++j])
 		{
-			j = 0;
-			str = ft_split(av[i], ' ');//free
-			if (*str == NULL)
+			if (ft_isdigit(str[j]) == 0)
 				ft_error();
-			while(str[j])
-			{
-				if(ft_isdigit(str[j]) == 0)
-				{
-					ft_free(str);
-					ft_error();
-				}
-				nb = ft_atoi(str[j]);
-				is_duplicate(head, nb);
-				ft_lstadd_back(&head, ft_lstnew(nb));
-				j++;
-			}
-			ft_free(str);
-			i++;
+			nb = ft_atoi(str[j]);
+			if (is_duplicate((*head), nb) == 0)
+				ft_error();
+			ft_lstadd_back(head, ft_lstnew(nb));
 		}
-		temp = head;
-		while(head)
-		{
-			printf("%d\n", head->i);
-			head = head->link;
-		}
-		head = temp;
-		int	*arr;
-		i = 0;
-		arr = tab(head);
-		while(arr[i])
-		{
-			printf("......%i\n", arr[i]);
-			i++;
-		}
+		ft_free(str);
+		i++;
+	}
+}
+
+int	main(int ac, char **av)
+{
+	t_list	*head;
+	t_list	*head_b;
+	int		i;
+
+	if (ac > 1)
+	{
+		parssing(av, &head, 1);
+		is_sorted(head);
+		if (ft_lstsize(head) == 2)
+			sa(&head, 1);
+		else if (ft_lstsize(head) == 3)
+			sort_3(&head);
+		else if (ft_lstsize(head) <= 5)
+			sort_5(&head, &head_b);
+		else if (ft_lstsize(head) <= 150)
+			sort_100(&head, &head_b);
 	}
 }

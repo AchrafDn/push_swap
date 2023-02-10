@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adadoun <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 17:23:59 by adadoun           #+#    #+#             */
+/*   Updated: 2023/02/07 17:24:00 by adadoun          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include"header.h"
 
 static int	nword(const char *s, char c)
@@ -21,12 +33,12 @@ static int	nword(const char *s, char c)
 			nb = nb + 1;
 		}
 		else
-		i++;
+			i++;
 	}
 	return (nb);
 }
 
-static void	ft_free(char **s)
+static void	ft_free1(char **s)
 {
 	size_t	i;
 
@@ -57,7 +69,7 @@ static char	**ft_res(char **ptr, char *s, char c, int k)
 			ptr[k] = ft_substr(s, i, j);
 			if (!ptr[k])
 			{
-				ft_free(ptr);
+				ft_free1(ptr);
 				return (NULL);
 			}
 			i = i + j;

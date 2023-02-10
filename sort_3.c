@@ -1,40 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   sort_3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adadoun <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 17:23:15 by adadoun           #+#    #+#             */
-/*   Updated: 2023/02/07 17:23:17 by adadoun          ###   ########.fr       */
+/*   Created: 2023/02/10 02:19:31 by adadoun           #+#    #+#             */
+/*   Updated: 2023/02/10 02:19:33 by adadoun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int	ft_atoi(const char *str)
+void	sort_3(t_list **head)
 {
-	size_t	i;
-	int		p;
-	size_t	res;
+	int	a;
+	int	b;
+	int	c;
 
-	res = 0;
-	p = 1;
-	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
+	a = (*head)->i;
+	b = (*head)->link->i;
+	c = (*head)->link->link->i;
+	if (b < a && a < c)
+		sa(head, 1);
+	else if (a < b && a > c)
+		rra(head, 1);
+	else if (a > b && b > c)
 	{
-		if (str[i] == '-')
-			p = -1;
-		i++;
+		sa(head, 1);
+		rra(head, 1);
 	}
-	while (str[i] <= '9' && str[i] >= '0')
+	else if (a > b && b < c)
+		ra(head, 1);
+	else if (a < b && b > c)
 	{
-		res = (res * 10) + (str[i] - 48);
-		if (res > 2147483647)
-			ft_error();
-		i++;
+		rra(head, 1);
+		sa(head, 1);
 	}
-	return (res * p);
 }

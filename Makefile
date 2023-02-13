@@ -4,6 +4,7 @@ Cfiles = moves.c \
 		push.c \
 		sort_3.c \
 		sort_5.c \
+		sort_100.c \
 		utils1.c \
 		utils2.c \
 		utils3.c \
@@ -19,7 +20,7 @@ NAME = push_swap
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-		cc $(Cflags) $(OBJ) -o $(NAME)
+		cc -fsanitize=address $(Cflags) $(OBJ) -o $(NAME)
 
 .c.o:
 		$(CC) $(Cflags) -c $< -o $@

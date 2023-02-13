@@ -65,10 +65,10 @@ void	pb(t_list **a, t_list **b)
 
 	if (!a)
 		return ;
+	ft_lstadd_front((*b), ft_lstnew((*a)->i));
 	ptr = (*a);
 	(*a) = (*a)->link;
-	ptr->link = (*b);
-	(*b) = ptr;
+	free(ptr);
 	write(1, "pb\n", 3);
 }
 

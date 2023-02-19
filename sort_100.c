@@ -12,6 +12,20 @@
 
 #include "header.h"
 
+int	check_exist(int *arr, int nb, t_struct *ptr)
+{
+	int	i;
+
+	i = ptr->start;
+	while (i <= ptr->end)
+	{
+		if (arr[i] == nb)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	sort_tab(int *arr, int len)
 {
 	int	min;
@@ -37,27 +51,28 @@ void	sort_tab(int *arr, int len)
 	}
 }
 
-// int	ft_func(t_list **head, int *arr, int start, int end)
-// {
-// 	int	i;
-// 	int	index;
-
-// 	i = start;
-// 	index = 1;
-// 	while ((*head))
-// 	{
-// 		if (check_exist(arr, (*head)->i, start, end) == 1)
-// 		{
-// 			push_b(head, index);
-// 		}
-// 		index++;
-// 		(*head) = (*head)->link;
-// 	}
-// }
-
-void	push_b(t_list **head, t_list **head_b, int index) //gad liha head
+void	initialize_struct(t_list **head_a, t_struct *ptr)
 {
-	printf("index %i", index);
+	int	i;
+
+	if (ft_lstsize((*head_a)) <= 10)
+		i = 5;
+	if (ft_lstsize((*head_a)) <= 150)
+		i = 8;
+	if (ft_lstsize((*head_a)) > 150)
+		i = 18;
+	ptr->index = 1;
+	ptr->arr = tab((*head_a)); //free
+	sort_tab(ptr->arr, ft_lstsize((*head_a)));
+	ptr->offset = ft_lstsize(*head_a) / i;
+	ptr->middle = ft_lstsize(*head_a) / 2 - 1;
+	ptr->start = ptr->middle - ptr->offset;
+	ptr->end = ptr->middle + ptr->offset;
+	ptr->len_array = ft_lstsize((*head_a));
+}
+
+void	push_b(t_list **head, t_list **head_b, int index, t_struct *ptr)
+{
 	if (index <= ft_lstsize((*head)) / 2)
 	{
 		while (index != 1)
@@ -68,66 +83,114 @@ void	push_b(t_list **head, t_list **head_b, int index) //gad liha head
 	}
 	else if (index > ft_lstsize((*head)) / 2)
 	{
-		while (index == ft_lstsize((*head)) + 1)
+		while (index <= ft_lstsize((*head)))
 		{
 			rra(head, 1);
 			index++;
 		}
 	}
 	pb(head, head_b);
+	if ((*head_b)->i <= ptr->arr[ptr->middle])
+		rb(head_b, 1);
 }
 
-int	check_exist(int *arr, int nb, int start, int end)
+void	push_stack_b(t_list **head_a, t_list **head_b, t_struct *ptr)
 {
-	while (start <= end)
-	{
-		if (arr[start] == nb)
-			return (1);
-		start++;
-	}
-	return (0);
-}
-void	sort_100(t_list **head_a, t_list **head_b)
-{
-	int *arr;
-	int offset;
-	int middle;
-	int start;
-	int end;
-	int index;
-	int i;
+	t_list	*temp;
 
-	i = 0;
-	index = 1;
-	head_b = NULL;
-	arr = tab((*head_a)); //free
-	sort_tab(arr, ft_lstsize((*head_a)));
-	while (i < ft_lstsize((*head_a)))
+	while ((*head_a))
 	{
-		printf("arr %i\n", arr[i]);
-		i++;
-	}
-	offset = ft_lstsize(*head_a) / 8;
-	middle = ft_lstsize(*head_a) / 2 - 1;
-	start = middle - offset;
-	end = middle + offset;
-	printf("start %i\n", start);
-	printf("end %i\n", end);
-	printf("middle %i\n", middle);
-	printf("offset %i\n", offset);
-	while (end >= 0 && start <= ft_lstsize(*head_a) - 1)
-	{
-		while ((*head_a))
+		temp = (*head_a);
+		ptr->index = 1;
+		while (temp)
 		{
-			if (check_exist(arr, (*head_a)->i, start, end) == 1)
+			if (check_exist(ptr->arr, temp->i, ptr) == 1)
 			{
-				push_b(head_a, head_b, index);
-				// printf("yes %i exist\n", (*head_a)->i);
-				// printf("index %i\n", index);
+				temp = temp->link;
+				push_b(head_a, head_b, ptr->index, ptr);
+				ptr->index = 1;
 			}
-			index++;
-			(*head_a) = (*head_a)->link;
+			else
+			{
+				ptr->index++;
+				temp = temp->link;
+			}
 		}
-		return ;
+		ptr->end = ptr->end + ptr->offset;
+		ptr->start = ptr->start - ptr->offset;
+		if (ptr->end > ptr->len_array - 1)
+			ptr->end = ptr->len_array - 1;
+		if (ptr->start < 0)
+			ptr->start = 0;
 	}
+}
+
+void	push_a(t_list **head_a, t_list **head_b, t_struct *ptr, int index_max)
+{
+	int		index;
+	int		count;
+	t_list	*temp;
+
+	while ((*head_b))
+	{
+		index = 1;
+		temp = (*head_b);
+		count = 0;
+		while (temp)
+		{
+			if (temp->i == ptr->arr[index_max])
+				break ;
+			index++;
+			temp = temp->link;
+		}
+		if (index <= ft_lstsize((*head_b)) / 2)
+		{
+			while ((*head_b)->i != ptr->arr[index_max])
+			{
+				if ((*head_b)->i == ptr->arr[index_max - 1])
+				{
+					pa(head_a, head_b);
+					count = 1;
+				}
+				else
+					rb(head_b, 1);
+			}
+		}
+		else if (index > ft_lstsize((*head_b)) / 2)
+		{
+			while ((*head_b)->i != ptr->arr[index_max])
+			{
+				if ((*head_b)->i == ptr->arr[index_max - 1])
+				{
+					pa(head_a, head_b);
+					count = 1;
+				}
+				else
+					rrb(head_b, 1);
+			}
+		}
+		pa(head_a, head_b);
+		if (count == 1)
+		{
+			sa(head_a, 1);
+			count = 0;
+			index_max--;
+		}
+		index_max--;
+	}
+}
+
+void	push_stack_a(t_list **head_a, t_list **head_b, t_struct *ptr)
+{
+	int	i;
+
+	i = ft_lstsize((*head_b)) - 1;
+	push_a(head_a, head_b, ptr, i);
+}
+
+void	sort_100(t_list **head_a, t_list **head_b, t_struct *ptr)
+{
+	initialize_struct(head_a, ptr);
+	push_stack_b(head_a, head_b, ptr);
+	push_stack_a(head_a, head_b, ptr);
 }

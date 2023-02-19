@@ -12,20 +12,20 @@
 
 #include "header.h"
 
-// void	ft_lstadd_back(t_list **lst, t_list *new)
-// {
-// 	t_list	*temp;
+void	ft_lstadd_back(t_list **lst, t_list *new)
+{
+	t_list	*temp;
 
-// 	if (!lst || !new)
-// 		return ;
-// 	if (!(*lst))
-// 		*lst = new;
-// 	else
-// 	{
-// 		temp = ft_lstlast(*lst);
-// 		temp->link = new;
-// 	}
-// }
+	if (!lst || !new)
+		return ;
+	if (!(*lst))
+		*lst = new;
+	else
+	{
+		temp = ft_lstlast(*lst);
+		temp->link = new;
+	}
+}
 
 void	ft_lstadd_front(t_list **lst, t_list *new)
 {

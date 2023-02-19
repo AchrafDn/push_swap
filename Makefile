@@ -11,7 +11,6 @@ Cfiles = moves.c \
 		ft_atoi.c \
 		ft_split.c \
 		ft_substr.c
-
 OBJ = ${Cfiles:.c=.o}
 
 RM = rm -f
@@ -20,7 +19,7 @@ NAME = push_swap
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-		cc -fsanitize=address $(Cflags) $(OBJ) -o $(NAME)
+		cc  $(Cflags) $(OBJ) -o $(NAME)
 
 .c.o:
 		$(CC) $(Cflags) -c $< -o $@
